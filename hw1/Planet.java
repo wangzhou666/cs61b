@@ -44,17 +44,19 @@ public class Planet {
 	
 	public double calcPairwiseForceX(Planet anotherPlanet) {
 		double forceX;
-		forceX = calcPairwiseForce(anotherPlanet) * Math.abs(x - anotherPlanet.x) / calcDistance(anotherPlanet);
+		forceX = - calcPairwiseForce(anotherPlanet) * (x - anotherPlanet.x) / calcDistance(anotherPlanet);
 		return forceX;
 	}
 	
 	public double calcPairwiseForceY(Planet anotherPlanet) {
 		double forceY;
-		forceY = calcPairwiseForce(anotherPlanet) * Math.abs(y - anotherPlanet.y) / calcDistance(anotherPlanet);
+		forceY = - calcPairwiseForce(anotherPlanet) * (y - anotherPlanet.y) / calcDistance(anotherPlanet);
 		return forceY;
 	}
 	
 	public void setNetForce(Planet[] planets) {
+		xNetForce = 0;
+		yNetForce = 0;
 		for (Planet p : planets) {
 			xNetForce += calcPairwiseForceX(p);
 			yNetForce += calcPairwiseForceY(p);
