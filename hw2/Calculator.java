@@ -13,7 +13,17 @@ public class Calculator {
      **/
     public int add(int x, int y) {
         // YOUR CODE HERE
-        return -1;
+        int carry = 0, result = 0;
+        for(int i = 0; i < 32; i++)
+        {
+            int n1 = (x & (1<<(i)))>>(i); //find the nth bit of p
+            int n2 = (y & (1<<(i)))>>(i); //find the nth bit of q
+
+            int s = (n1 ^ n2) ^ carry; //sum of bits
+            carry = (carry==0) ? (n1&n2): (n1 | n2); //calculate the carry for next step
+            result = result | (s<<(i)); //calculate resultant bit
+        }
+        return result;
     }
 
     /**
@@ -26,8 +36,18 @@ public class Calculator {
      **/
     public int multiply(int x, int y) {
         // YOUR CODE HERE
-        return -1;
-    }
+        int carry = 0, result = 0;
+        for (int i = 0; i < 32; i++) {
+            if ((x & (1 << (i))) != 0) {
+                carry = y << (i);
+            } else {
+                carry = 0;
+            }
+            result = add(result, carry);
+        }
+        return result;
+
+}
 
     /**
      * TASK 5A: CALCULATOR HISTORY - IMPLEMENTING THE HISTORY DATA STRUCTURE
