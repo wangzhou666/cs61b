@@ -11,6 +11,8 @@ public class Calculator {
      * @param y is an integer which is the other of the two addends
      * @return the sum of x and y
      **/
+    private EquationList listHead = null;
+
     public int add(int x, int y) {
         // YOUR CODE HERE
         int carry = 0, result = 0;
@@ -60,6 +62,15 @@ public class Calculator {
      **/
     public void saveEquation(String equation, int result) {
         // YOUR CODE HERE
+        if (listHead == null) {
+            listHead = new EquationList(equation, result, null);
+        } else {
+            EquationList p = listHead;
+            while (p.next != null) {
+                p = p.next;
+            }
+            p.next = new EquationList(equation, result, null);
+        }
     }
 
     /**
@@ -71,6 +82,11 @@ public class Calculator {
      **/
     public void printAllHistory() {
         // YOUR CODE HERE
+        EquationList p = listHead;
+        while (p != null) {
+            System.out.println(p.equation + " = " + p.result);
+            p = p.next;
+        }
     }
 
     /**
@@ -82,6 +98,11 @@ public class Calculator {
      **/
     public void printHistory(int n) {
         // YOUR CODE HERE
+        EquationList p = listHead;
+        for (int i = 0; i < n; i++) {
+            p = p.next;
+        }
+        System.out.println(p.equation + " = " + p.result);
     }    
 
     /**
@@ -90,6 +111,11 @@ public class Calculator {
     **/
     public void undoEquation() {
         // YOUR CODE HERE
+        EquationList p = listHead;
+        while (p.next.next != null) {
+            p = p.next;
+        }
+        p.next = null;
     }
 
     /**
@@ -98,6 +124,7 @@ public class Calculator {
      **/
     public void clearHistory() {
         // YOUR CODE HERE
+        listHead = null;
     }
 
     /**
@@ -108,7 +135,13 @@ public class Calculator {
      **/
     public int cumulativeSum() {
         // YOUR CODE HERE
-        return -1;
+        int result = 0;
+        EquationList p = listHead;
+        while (p != null) {            
+            result = add(result, p.result);
+            p = p.next;
+        }
+        return result;
     }
 
     /**
@@ -119,6 +152,12 @@ public class Calculator {
      **/
     public int cumulativeProduct() {
         // YOUR CODE HERE
-        return -1;
+        int result = 1;
+        EquationList p = listHead;
+        while (p != null) {            
+            result = multiply(result, p.result);
+            p = p.next;
+        }
+        return result;
     }
 }
