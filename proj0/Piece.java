@@ -3,6 +3,7 @@ public class Piece {
 	private boolean isFire;
 	private String type;
 	private Board b;
+	private boolean capturedAnother;
 
 	public Piece(boolean _isFire, Board _b, int _x, int _y, String _type) {
 		x = _x;
@@ -10,6 +11,7 @@ public class Piece {
 		b = _b;
 		isFire = _isFire;
 		type = _type;
+		capturedAnother = false;
 	}
 
 	public boolean isFire() {
@@ -45,14 +47,16 @@ public class Piece {
 	}
 
 	public void move(int _x, int _y) {
-
+		x = _x;
+		y = _y;
+		b.place(this, x, y);
 	}
 
 	public boolean hasCaptured() {
-		return false;
+		return capturedAnother;
 	}
 
 	public void doneCapturing() {
-
+		capturedAnother = false;
 	}
 }
