@@ -37,8 +37,8 @@ public class Board {
            	fireTurn = true;
            	selectedPiece = null;
            	currentTurnMoved = false;
-           	currentSelectedCoordinate = new int[2];
-           	pieceLastCoordinate = new int[2];
+           	currentSelectedCoordinate = new int[] {8, 8};
+           	pieceLastCoordinate = new int[] {8, 8};
            	currentTurnCaptured = false;
         }
 	}
@@ -52,8 +52,12 @@ public class Board {
 
 	public boolean canSelect(int x, int y) {
 		if (pieceAt(x, y) != null){  // if (x,y) is a piece
-			if ((selectedPiece == null) | (!currentTurnMoved)) {
-				return true;
+			if (selectedPiece == null) {
+				if (fireTurn) {
+					return pieceAt(x, y).isFire();
+				} else {
+					return !pieceAt(x, y).isFire();
+				}
 			} else {
 				return false;
 			}
@@ -70,6 +74,9 @@ public class Board {
 	}
 
 	private boolean validMove(int xi, int yi, int xf, int yf) {
+		if (pieceAt(xi, yi) == null) { // no piece to move
+			return false;
+		}
 		if (pieceAt(xf, yf) != null) { // chosen slot is not empty
 			return false;
 		} else if (xf > 7 | xf < 0 | yf > 7 | yf < 0) { // out of board
@@ -142,7 +149,7 @@ public class Board {
 						return true;
 					} else {
 						if (xf - xi == 2) {
-							return !pieceAt(xi + 1, yi + 1).isFire();
+							return pieceAt(xi + 1, yi + 1).isFire();
 						} else {
 							return false;
 						}
@@ -152,7 +159,7 @@ public class Board {
 						return true;
 					} else {
 						if (xf - xi == 2) {
-							return !pieceAt(xi + 1, yi - 1).isFire();
+							return pieceAt(xi + 1, yi - 1).isFire();
 						} else {
 							return false;
 						}
@@ -165,6 +172,9 @@ public class Board {
 	}
 
 	private boolean hasPieceInBetween(int xi, int yi, int xf, int yf) {
+		if (xi == xf) {
+			return false;
+		}
 		int diag = (xf - xi)/(yf - yi);
 		if (diag == 1) {
 			if (xi < xf) {
@@ -210,9 +220,9 @@ public class Board {
 		currentSelectedCoordinate[0] = x;
 		currentSelectedCoordinate[1] = y;
 		StdDrawPlus.setPenColor(StdDrawPlus.YELLOW);
-		StdDrawPlus.filledSquare((7 - x + 0.5)/8, (y + 0.5)/8, 0.5/8);
+		StdDrawPlus.filledSquare((y + 0.5)/8, (7 - x + 0.5)/8, 0.5/8);
 		if (pieceAt(x, y) != null) {
-			StdDrawPlus.picture((7 - x + 0.5)/8, (y + 0.5)/8, getIcon(pieceAt(x, y)), 0.125, 0.125);
+			StdDrawPlus.picture((y + 0.5)/8, (7 - x + 0.5)/8, getIcon(pieceAt(x, y)), 0.125, 0.125);
 			selectedPiece = slotsOfBoard[x][y].pieceInSlot;
 		}
 	}
@@ -263,8 +273,8 @@ public class Board {
 		}
 		int xp = x;
 		int yp = y;
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 7; j++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if (slotsOfBoard[i][j].pieceInSlot == p) {
 					xp = i;
 					yp = j;
@@ -278,13 +288,14 @@ public class Board {
 		pieceLastCoordinate[0] = xp;
 		pieceLastCoordinate[1] = yp;
 		// display changes
-		if ((xp + yp) % 2 == 0) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
+		if ((xp + yp) % 2 == 1) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
         else                  StdDrawPlus.setPenColor(StdDrawPlus.BLACK);
-        StdDrawPlus.filledSquare((7 - xp + 0.5)/8, (yp + 0.5)/8, 0.5/8);
-        if ((x + y) % 2 == 0) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
+        StdDrawPlus.filledSquare((yp + 0.5)/8, (7 - xp + 0.5)/8, 0.5/8);
+        if ((x + y) % 2 == 1) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
         else                  StdDrawPlus.setPenColor(StdDrawPlus.BLACK);
-        StdDrawPlus.filledSquare((7 - x + 0.5)/8, (y + 0.5)/8, 0.5/8);
-        StdDrawPlus.picture((7 - x + 0.5)/8, (y + 0.5)/8, getIcon(p), 0.125, 0.125);
+        StdDrawPlus.filledSquare((y + 0.5)/8, (7 - x + 0.5)/8, 0.5/8);
+        StdDrawPlus.picture((y + 0.5)/8, (7 - x + 0.5)/8, getIcon(p), 0.125, 0.125);
+        currentTurnMoved = true;
         // if it does not upgrade to king, end moving
         if (!canBeKing(p)) {
         	return;
@@ -294,17 +305,17 @@ public class Board {
         } else {
         	slotsOfBoard[x][y].pieceInSlot = new Piece(false, this, x, y, "king");
         }
-        if ((x + y) % 2 == 0) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
+        if ((x + y) % 2 == 1) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
         else                  StdDrawPlus.setPenColor(StdDrawPlus.BLACK);
-        StdDrawPlus.filledSquare((7 - x + 0.5)/8, (y + 0.5)/8, 0.5/8);
-        StdDrawPlus.picture((7 - x + 0.5)/8, (y + 0.5)/8, getIcon(slotsOfBoard[x][y].pieceInSlot), 0.125, 0.125);
+        StdDrawPlus.filledSquare((y + 0.5)/8, (7 - x + 0.5)/8, 0.5/8);
+        StdDrawPlus.picture((y + 0.5)/8, (7 - x + 0.5)/8, getIcon(slotsOfBoard[x][y].pieceInSlot), 0.125, 0.125);
 	}
 
 	private boolean canBeKing(Piece p) {
 		int xp = 8;
 		int yp = 8;
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 7; j++) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				if (slotsOfBoard[i][j].pieceInSlot == p) {
 					xp = i;
 					yp = j;
@@ -329,8 +340,8 @@ public class Board {
 	private void captrueWithPiece(Piece p) {
 		// normal capture
 		int[] normalCaptureCoordinate = new int[2];
-		normalCaptureCoordinate[0] = (int)Math.abs(pieceLastCoordinate[0] - currentSelectedCoordinate[0]);
-		normalCaptureCoordinate[1] = (int)Math.abs(pieceLastCoordinate[1] - currentSelectedCoordinate[1]);
+		normalCaptureCoordinate[0] = (int)Math.abs(pieceLastCoordinate[0] + currentSelectedCoordinate[0])/2;
+		normalCaptureCoordinate[1] = (int)Math.abs(pieceLastCoordinate[1] + currentSelectedCoordinate[1])/2;
 		remove(normalCaptureCoordinate[0], normalCaptureCoordinate[1]);
 		// if bomb, exlposion...
 		if (p.isBomb()) {
@@ -343,6 +354,7 @@ public class Board {
 					}
 				}
 			}
+			selectedPiece = null;		
 		}
 	}
 
@@ -359,9 +371,9 @@ public class Board {
 		slotsOfBoard[x][y].isEmpty = true;
 		slotsOfBoard[x][y].pieceInSlot = null;
 		// display changes
-		if ((x + y) % 2 == 0) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
+		if ((x + y) % 2 == 1) StdDrawPlus.setPenColor(StdDrawPlus.GRAY);
         else                  StdDrawPlus.setPenColor(StdDrawPlus.BLACK);
-        StdDrawPlus.filledSquare((7 - x + 0.5)/8, (y + 0.5)/8, 0.5/8);
+        StdDrawPlus.filledSquare((y + 0.5)/8, (7 - x + 0.5)/8, 0.5/8);
 		return pieceToReturn;
 	}
 
@@ -375,8 +387,8 @@ public class Board {
 	public void endTurn() {
 		fireTurn = !fireTurn;
 		selectedPiece = null;
-		currentSelectedCoordinate = new int[2];
-		pieceLastCoordinate = new int[2];
+		currentSelectedCoordinate = new int[] {8, 8};
+		pieceLastCoordinate = new int[] {8, 8};
 		currentTurnMoved = false;
 		currentTurnCaptured = false;
 		if (fireTurn) {
@@ -389,9 +401,9 @@ public class Board {
 	public String winner() {
 		int countFire = 0;
 		int countWater = 0;
-		for (int i = 0; i < 7; i++) {
-			for (int j = 0; j < 7; j++) {
-				if (slotsOfBoard[i][j] == null) {
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (slotsOfBoard[i][j].isEmpty) {
 					continue;
 				} else {
 					if (slotsOfBoard[i][j].pieceInSlot.isFire()) {
@@ -417,7 +429,8 @@ public class Board {
 		// initiate board
 		Board b = new Board(false);
 		int clickedX = 8;
-		int clickedY = 8;
+    	int clickedY = 8;
+    	String theWinner = null;
 		for(int i = 0; i < 4; i++) {
 			b.slotsOfBoard[0][2 * i + 1].isEmpty = false;
 	        b.slotsOfBoard[0][2 * i + 1].pieceInSlot = new Piece(false, b, 0, 2 * i + 1, "pawn");
@@ -432,19 +445,41 @@ public class Board {
 	        b.slotsOfBoard[7][2 * i + 0].isEmpty = false;
 	        b.slotsOfBoard[7][2 * i + 0].pieceInSlot = new Piece(true, b, 7, 2 * i + 1, "pawn");
     	}
-
-    	// test
-    	// System.out.println(b.pieceAt(4,4));
-    	// System.out.println(b.validMove(7,0,4,3));
-    	b.select(7,6);
-    	// while (true) {
-    	// 	if (StdDrawPlus.mousePressed()) {
-    	// 		clickedY = 7 - (int)(StdDrawPlus.mouseX()*8);
-    	// 		clickedX = 7 - (int)(StdDrawPlus.mouseY()*8);   			
-    	// 	}
-    	// 	b.select(clickedX, clickedY);
-    	// 	StdDrawPlus.show(10);
-    	// }
+    	while (true) {
+    		if (b.winner() != null) {
+    			theWinner = b.winner();
+    			break;
+    		}
+    		// select two (x,y)s, one for piece to move, the other for destination    		
+    		while (true) {   			 
+    			if (StdDrawPlus.mousePressed()) {
+    				clickedX = 7 - (int)(StdDrawPlus.mouseY()*8);
+    				clickedY = (int)(StdDrawPlus.mouseX()*8); 
+    				b.select(clickedX, clickedY);
+    			 	break;
+    			} 			
+    		}
+    		// move piece to selected coordinate		
+    		if (b.selectedPiece != null & b.pieceAt(b.currentSelectedCoordinate[0], b.currentSelectedCoordinate[1]) == null) {
+    			b.place(b.selectedPiece, b.currentSelectedCoordinate[0], b.currentSelectedCoordinate[1]);
+    			//StdDrawPlus.show(10);
+    			// if capture
+    			if (b.hasPieceInBetween(b.pieceLastCoordinate[0], b.pieceLastCoordinate[1], b.currentSelectedCoordinate[0], b.currentSelectedCoordinate[1])) {
+    				b.captrueWithPiece(b.pieceAt(b.currentSelectedCoordinate[0], b.currentSelectedCoordinate[1]));
+    			}    			
+    		}
+    		while (b.canEndTurn()) {
+    			if (StdDrawPlus.isSpacePressed()) {
+    				b.endTurn();
+    				break;
+    			}	
+    			if (StdDrawPlus.mousePressed()) {
+    			 	break;
+    			} 
+    		}
+    		
+    	}
+    	System.out.println("The winner is " + theWinner);
 	}
 }
 
