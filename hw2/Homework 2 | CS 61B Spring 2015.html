@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homework 2 | CS 61B Spring 2015</title>
+    <meta charset="UTF-8">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" type="text/css">
+    <link href="../../../assets/css/common.css" rel="stylesheet" type="text/css">
+    <link href="../../../assets/css/lab.css" rel="stylesheet" type="text/css">
+
+    <script src="../../../assets/js/jquery-1.11.2.min.js" type="text/javascript"></script>
+</head>
+<body>
+    <div class="navbar-top"><div id="navitems">
+        <a href="../../../index.html"><div class="navitem">Main</div></a>
+        <a href="../../../about.html"><div class="navitem">Course Info</div></a>
+        <a href="../../../staff.html"><div class="navitem">Staff</div></a>
+        <a href="../../../assign.html"><div class="navitem">Assignments</div></a>
+        <a href="../../../resources.html"><div class="navitem">Resources</div></a>
+        <a href="https://piazza.com/class/hx9h4t96ea8qv"><div class="navitem">Piazza</div></a>
+    </div></div>
+    <main class="content">
+        <header class="title">Homework 2: Bit Operations, Pointers, Linked Lists</header>
+<h2 id="navigation">Navigation</h2>
+
+
+<ul>
+  <li><p><a href="#tasks">Your Tasks</a></p>
+
+  <ul>
+    <li><a href="#junit">Task 1: Write JUnit Tests</a></li>
+    <li><a href="#add">Task 2: Adding with Bit Operations</a></li>
+    <li><a href="#multiply">Task 3: Multiplying with Bit Operations</a></li>
+    <li><a href="#task4x">Task 4X: Basic User Input (Optional)</a></li>
+    <li><a href="#task4b">Task 4B: Using the Interface</a></li>
+    <li><a href="#history">Task 5: Calculator History</a></li>
+    <li><a href="#clear">Task 6: clear and undo</a></li>
+    <li><a href="#adv">Task 7: Advanced Calculator History Commands</a></li>
+    <li><a href="#more">More for Masters</a></li>
+  </ul></li>
+  <li><a href="#submit">Submission Instructions</a></li>
+</ul>
+
+<p>Consider this HW a pretty mature beta. Report any errors directly to Josh: hug@cs.berkeley.edu.</p>
+
+<a name="tasks"></a>
+
+
+<h4 id="your-tasks">Your Tasks</h4>
+
+
+<p>In this assignment, we will implement a basic calculator using bitwise operators.  This calculator will maintain a history of calculations which we can operate on as well.  You will find some skeleton code available to you, and you are free to add any additional methods and fields you think will be helpful.</p>
+
+<a name="junit"></a>
+
+
+<h2 id="task-1-write-junit-tests">Task 1: Write JUnit Tests</h2>
+
+
+<p>Unfortunately, the staff procrastinated on creating this homework assignment and wrote the calculator code in a hurry!  In their rush, your TAs wrote a pretty buggy adder.</p>
+
+<p>Your task is to write a minimum of 3 JUnit tests to test the addition code in the staff calculator in the included CalculatorTest.java skeleton. At least one of the tests must fail on the StaffCalculator, i.e. should catch a bug in the staff implementation of the adder. Of course, one silly way to induce a test failure is to write a broken test (3 + 2 = -187921). Don't do this! Instead, you'll need to come up with powerful enough simple tests that are able to find the bug in <code>StaffCalculator</code>.</p>
+
+<p>Note that you have no idea what the implementation looks like. This is a good thing! We're treating the <code>add</code> method of StaffCalculator as a mysterious black box that adds numbers. There's no need to know what is inside to write good tests.</p>
+
+<p>The method signature for addition is:</p>
+
+<pre><code>public int add(int x, int y)</code></pre>
+
+<p>Throughout this course, we encourage you to write tests for every method you write, ideally even before you start the implementation of that method.  In later assignments, you'll be free to do less rigorous testing, but for now, we want to show that it's not so bad.</p>
+
+<p>By completing this task, you've already written tests that you can use on your calculator implementation (coming later in this assignment). To test your own implementation, read the comments in the <code>setUp()</code> method of <code>CalculatorTest.java</code>.</p>
+
+<a name="add"></a>
+
+
+<h2 id="task-2-adding-with-bit-operations">Task 2: Adding with Bit Operations</h2>
+
+
+<p>In this part of the assignment, you will implement the addition functionality of a calculator.  Write the <code>add</code> function, which takes in two integers and computes their sum.  You are <em>not</em> allowed to use any of the standard math operators, i.e. <code>+</code>, <code>&#x2d;</code>, <code>/</code>, <code>*</code>, <code>%</code>, <code>++</code>, <code>&#x2d;&#x2d;</code>, <code>+=</code>, <code>&#x2d;=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, or any equivalent method calls.  Instead, use the bitwise operators <code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code>, <code>&gt;&gt;&gt;</code>, etc.  The one exception: if you choose to use a loop, you may use <em>one</em> standard math operator to increment the loop counter.</p>
+
+<p>This may sound like a trivial task at first, but <strong>you'll find that it is actually a rather challenging puzzle</strong>. We encourage you to discuss strategies with other students. Most (all?) sensible solutions require some sort of loop. You should strive for clarity over concision. You may find it useful to create a helper method (but this is not required, and the most elegant solutions do not call for one).</p>
+
+<p>Hint 1: Try working out a small example with a truth table of the addition on paper first before translating it into code.</p>
+
+<p>Hint 2: Don't bother thinking about negative numbers at first. Chances are that any solution that works for positive numbers will automatically work for negative ones.</p>
+
+<p>Your function should be located in the Calculator class with the following method signature:</p>
+
+<pre><code>public int add(int x, int y) {
+    /** YOUR CODE HERE **/
+}</code></pre>
+
+<a name="mult"></a>
+
+
+<h2 id="task-3-multiplying-with-bit-operations">Task 3: Multiplying with Bit Operations</h2>
+
+
+<p>Similar to the previous part, you will implement the multiplication functionality of a calculator.  Write the multiply function, which takes in two integers and computes their product.  As before, you may not use any of the standard math operators <code>+</code>, <code>&#x2d;</code>, <code>/</code>, <code>*</code>, <code>%</code>, <code>++</code>, <code>&#x2d;&#x2d;</code>, <code>+=</code>, <code>&#x2d;=</code>, <code>*=</code>, <code>/=</code>, <code>%=</code>, or any equivalent method calls.  The one exception, as before: if you choose to use a loop, you may use one standard math operator to increment the loop counter.  You are allowed to use the <code>add()</code> function you wrote in the previous part, and you should use at least one of the bitwise operators in a non-trivial manner.</p>
+
+<p>Before you begin, write tests. The staff solution will fail some of these tests because of its dependence on the buggy <code>add()</code> function.</p>
+
+<p>Your function should be located in the Calculator class with the following method signature:</p>
+
+<pre><code>public int multiply(int x, int y) {
+    /** YOUR CODE HERE **/
+}</code></pre>
+
+<p>Hint: Try to get multiplication to work where y is a power of 2 first.  Once you have that working, think about how you can get it to work with all integers.</p>
+
+<a name="task4x"></a>
+
+
+<h2 id="task-4x-basic-user-input">Task 4X: Basic User Input</h2>
+
+
+<p><strong>MORE FOR MASTERS</strong></p>
+
+<p>This is an optional task for those of you who want a greater challenge. In this task, we'll learn how to process input from the user. We will not provide official support for this task in OH or Piazza, though if things aren't too busy we'll be happy to answer questions. If you are skipping this challenge, <a href="#task4b">click here</a>. There is no shame in skipping this!</p>
+
+<p>Create a new file <code>CalculatorUI.java</code>. Create a user interface for your <code>Calculator</code> by implementing the <code>main</code> method in <code>CalculatorUI</code> shown below:</p>
+
+<pre><code>public static void main(String[] args) {
+    while (true) {
+        /** YOUR CODE HERE **/
+    }
+}</code></pre>
+
+<p>This method should prompt the user with a <code>&gt;</code> symbol to enter a command and respond as follows:</p>
+
+<p>Example run:</p>
+
+<pre><code>&gt; 1 + 2
+3
+&gt; 3 * 4
+12</code></pre>
+
+<p>Your calculator only needs to be able to support expressions containing exactly one arithmetic operator.</p>
+
+<b><em>a</em> + <em>b</em></b>
+
+<p>Adds a and b together.  Note that this expression is entered in by the user as a String.  You will need to find some way of extracting out the integer corresponding to a and b.  For simplicity, you may assume that there will always be exactly one space between a, +, and b.  You may also assume that there will be no space between a negative sign and the corresponding integer.</p>
+
+<p>For example:</p>
+
+<pre><code>1 + &#x2d; 2  // Invalid expression.  (Space between &#x2d; and 2)
+1 + &#x2d;2   // Valid expression.
+1 + &#x2d;&#x2d;2  // Invalid expression.  (We will not allow double negative signs)</code></pre>
+
+<b><em>a</em> * <em>b</em></b>
+
+<p>Like above, but multiplies <em>a</em> and <em>b</em> together.</p>
+
+<p><strong>quit</strong></p>
+
+<p>Exits the calculator.  This means that you should not prompt the user for more input.</p>
+
+
+<h3 id="stdin">StdIn</h3>
+
+
+<p>To get input from the keyboard, you should use <code>StdIn</code> from the Princeton standard library. It is similar to the <code>In</code> class that you used in HW1, but takes input from your operation system's 'standard input' instead of from a file. Think of standard input as a hose running from your operating system into your program. The OS can deliver information from any source via standard input. By default, this source is from the keyboard.</p>
+
+<p>Since this is an extra challenge, we will not explain <code>StdIn</code> in this document. See the <a href="http://introcs.cs.princeton.edu/java/stdlib/javadoc/StdIn.html">StdIn JavaDocs</a> and <a href="http://introcs.cs.princeton.edu/java/15inout/">StdIn documentation</a> for written directions, or this <a href="https://www.youtube.com/watch?v=bstdXGYJCTo">StdIn demo</a> for a video tutorial. You might also find the examples in the <a href="../">examples directory</a> useful.</p>
+
+<p>It is OK if your code crashes on invalid expressions. We will discuss handling errors later in the course.</p>
+
+<a id="task4b"></a>
+
+
+<h2 id="task-4b-using-the-interface">Task 4B: Using the Interface</h2>
+
+
+<p>Compile and run <code>StaffCalculatorUI</code> (or <code>CalculatorUI</code> if you created your own). Try typing expressions that involve only a single <code>+</code> or <code>*</code> sign and you should see results like the following. This UI is very limited and cannot handle longer expressions or real numbers.</p>
+
+<pre><code>&gt; 1 + 2
+3
+&gt; 3 * &#x2d;4
+&#x2d;12</code></pre>
+
+<a name="history"></a>
+
+
+<h2 id="task-5-calculator-history">Task 5: Calculator History</h2>
+
+
+<p>We'll now add the ability to print the history of equations that have been entered, along with the result, with the most recent equation first. This command will print one equation (along with its result) on each line.  Note that only equations should be stored; do not store other commands such as "sum", "history", etc.</p>
+
+<p>Here is an example run:</p>
+
+<pre><code>&gt; 1 + 2
+3
+&gt; 3 * 4
+12
+&gt; history 1
+3 * 4 = 12
+&gt; dump
+3 * 4 = 12
+1 + 2 = 3</code></pre>
+
+<p>The dump command prints all entries in the history. The history command prints the n most recent equations. Tasks 5A-5C provide a recommended sequence for implementing this functionality.</p>
+
+
+<h3 id="task-5a-implementing-the-history-data-structure">Task 5A: Implementing the History Data Structure</h3>
+
+
+<p>To support the command above, we need to store: (1) a history of equations that were run, and (2) their corresponding results.  You may assume that (1) will be an equation represented as a String, and (2) will be an integer corresponding to the result.</p>
+
+<p>The data structure we will use is the EquationList class you will find under the list directory.  This is similar to the linked list that was covered in lecture, and the diagram below shows an example of its use.  <strong>You are not allowed to use any of Java's built-in list structures.</strong></p>
+
+<pre><code>+&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;+    +&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;+
+| EquationList      |    | EquationList      |
++&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;+    +&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;+
+| equation: &quot;1 + 2&quot; |    | equation: &quot;3 * 4&quot; |
+| result:   3       |    | result:   12      |
+| next:     &#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;+&#x2d;&#x2d;&#x2d;&gt;| next:     null    |
++&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;+    +&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;&#x2d;+</code></pre>
+
+<p>Write the <code>saveEquation</code> method in <code>Calculator</code>. You will need to add at least one member variable to the <code>Calculator</code> class. You may create a constructor, but you are not required to do so.</p>
+
+<pre><code>public void saveEquation(String equation, int result) {
+    /** YOUR CODE HERE **/
+}</code></pre>
+
+
+<h3 id="task-5b-adding-printhistory-helper-methods">Task 5B: Adding printHistory Helper Methods</h3>
+
+
+<p>Fill in the <code>printHistory(int n)</code> and <code>printAllHistory()</code> commands.</p>
+
+<p>Hint: One of these methods is a special case of the other.  Can you write that method without copying-and-pasting your code?</p>
+
+<pre><code>public void printHistory(int n) {
+    /** YOUR CODE HERE **/
+}
+
+public void printAllHistory() {
+    /** YOUR CODE HERE **/
+}</code></pre>
+
+<p>Optionally, you may write tests to ensure your <code>saveEquation</code> and <code>printHistory</code> methods work. Alternately, you may proceed to task 5C and use that for testing instead. Generally, I do not recommend performing system-level tests of basic functionality, but since this system is so simple, it is not too unreasonable in this case.</p>
+
+
+<h3 id="task-5x-adding-the-history-and-dump-commands">Task 5X: Adding the history and dump Commands</h3>
+
+
+<p>If you're creating <code>CalculatorUI</code>, modify your main method so that it properly handles the <code>history</code> and <code>dump</code> commands.  Otherwise, you may want to look inside <code>StaffCalculatorUI</code> to see how and where the methods you wrote in this task are being used.</p>
+
+<a name="clear"></a>
+
+
+<h2 id="task-6-clear-and-undo">Task 6: clear and undo</h2>
+
+
+<p>We will next add an <code>undo</code> command that will allow us to remove the most recent entry from our history, and a clear command that will allow us to clear our entire history.</p>
+
+<p><strong>clear</strong></p>
+
+<p>Clears all entries in history.  Subsequent runs of history should not print anything to the terminal, since every entry in history has been removed.</p>
+
+<p><strong>undo</strong></p>
+
+<p>Removes the most recently entered equation from history.  All other entries in history should remain unchanged.</p>
+
+<p>For example:</p>
+
+<pre><code>&gt; 1 + 2
+3
+&gt; 3 * 4
+12
+&gt; 8 * &#x2d;2
+&#x2d;16
+&gt; dump
+8 * &#x2d;2 = &#x2d;16
+3 * 4 = 12
+1 + 2 = 3
+&gt; undo
+&gt; dump
+3 * 4 = 12
+1 + 2 = 3
+&gt; clear
+&gt; dump
+&gt;     </code></pre>
+
+<p>Your code that performs the <code>undo</code> and <code>clear</code> operations should be added to <code>undoEquation()</code> and <code>clearHistory()</code> respectively.</p>
+
+<h2 id="task-6x-calculatorui">Task 6X: CalculatorUI</h2>
+
+
+<p>If you created your own CalculatorUI, update your main method to support these new commands.</p>
+
+<a name="adv"></a>
+
+
+<h2 id="task-7-advanced-calculator-history-commands">Task 7: Advanced Calculator History Commands</h2>
+
+
+<p>Our market research team has discovered that our Calculator users are clamoring for a bizarre feature: for this final part of the assignment, we will implement commands sum and product that will compute the sum and product respectively of all equations in the history.</p>
+
+<p><strong>sum</strong></p>
+
+<p>Computes a sum over the result of each equation in history.  If there are no equations, we will return a sum of 0.</p>
+
+<p>For example, if we again have <code>1 + 2</code> and <code>3 * 4</code> in our history, you should output:  (this is computed as (1 + 2) + (3 * 4))</p>
+
+<pre><code>&gt; sum
+15</code></pre>
+
+<p><strong>product</strong></p>
+
+<p>Computes a product over the result of each equation in history.  If there are no equations, we will return a product of 1.  Using the same example as before, you should output:  (computed as (1 + 2) * (3 * 4))</p>
+
+<pre><code>&gt; product
+36</code></pre>
+
+<p>The code that implements these keywords should be in <code>cumulativeSum()</code> and <code>cumulativeProduct()</code> respectively.</p>
+
+
+<h2 id="task-7x-calculator-ui">Task 7X: Calculator UI</h2>
+
+
+<p>If you created your own CalculatorUI, update your main method to support these new commands.</p>
+
+<a name="more"></a>
+
+
+<h2 id="more-for-masters">More for Masters</h2>
+
+
+<p>If you still haven't had enough, here are some more things you might try:</p>
+
+<ul>
+  <li>"Bulletproof" your calculator.  Assume that the TA grading your program will attempt to run malformed input - for instance, <code>1 +</code> (which is invalid because it's missing the second argument), or insert extra spaces to confuse the calculator - for instance, <code>  history</code>  or <code>1    + 2</code>.  Make sure that your calculator gracefully rejects the first case, and accurately handles the second case.  You may continue to assume that there will be no spaces separating a negative sign with the corresponding integer.</li>
+  <li>Support nested expressions.</li>
+</ul>
+
+<a name="submit"></a>
+
+
+<h2 id="submission-instructions">Submission Instructions</h2>
+
+
+<p>To recieve feedback from the autograder via email, push to the <code>ag/hw2</code> branch, following <a href="../../lab/lab1/lab1.html#autograder">the directions from lab 1</a>.</p>
+
+<p>To submit, push to the <code>submit/hw2</code> branch, following <a href="../../lab/lab1/lab1.html#autograder">the directions from lab 1</a>.  Alternatively, refer to <a href="https://piazza.com/class/hx9h4t96ea8qv?cid=554">this cheatsheet on Piazza</a>.</p>
+    </main>
+</body>
+</html>
+
