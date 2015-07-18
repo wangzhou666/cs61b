@@ -21,4 +21,3 @@ public class ArrayList61BTest {
     public static void main(String[] args) {
         jh61b.junit.textui.runClasses(ArrayList61BTest.class);
     }
-}   
