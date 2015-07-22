@@ -86,7 +86,6 @@ public class WordNet {
  		TreeSet<Integer> reachable = new TreeSet<Integer>();
  		Digraph reversedGraph = graphHyponyms.reverse();
  		for (int id : existIDs) {
- 			System.out.println(id);
  			DirectedDFS dfdp = new DirectedDFS(reversedGraph, id);
  			for (int i = 0; i < graphHyponyms.V(); i++) {
 	 			if (dfdp.marked(i) & !reachable.contains(i)) {
