@@ -75,8 +75,8 @@ public class WordNetDemo {
         /** From: http://goo.gl/EGLoys */
         System.out.println("Hypnoyms of change:");
 
-        WordNet wn2 = new WordNet("./p1data/wordnet/synsets.txt", "./p1data/wordnet/hyponyms.txt");
-        for (String noun : wn2.hyponyms("gargle")) {
+        WordNet wn2 = new WordNet("./p1data/wordnet/synsets14.txt", "./p1data/wordnet/hyponyms14.txt");
+        for (String noun : wn2.hyponyms("change")) {
             System.out.println(noun);
         }              
     }    

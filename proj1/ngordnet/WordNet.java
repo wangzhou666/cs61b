@@ -39,9 +39,7 @@ public class WordNet {
 			String replaced_1st = currentLine.replaceFirst(",", " ");
 			Scanner sc = new Scanner(replaced_1st);
 			int num = sc.nextInt();
-			TreeSet<Integer> wordIDs = new TreeSet<Integer>();
 			TreeSet<String> words = new TreeSet<String>();
-			wordIDs.add(num);
 			while (sc.hasNext()) {
 				String currentToken = sc.next();
 				if (currentToken.contains(",")) {
@@ -51,11 +49,11 @@ public class WordNet {
 				}
 				words.add(currentToken);
 				if (tableSynsets.containsKey(currentToken)) {
-					TreeSet<Integer> existIDs = tableSynsets.get(currentToken);
-					existIDs.add(num);
-					tableSynsets.remove(currentToken);
-					tableSynsets.put(currentToken, existIDs);
+					TreeSet<Integer> wordIDs = tableSynsets.get(currentToken);
+					wordIDs.add(num);
 				} else {
+					TreeSet<Integer> wordIDs = new TreeSet<Integer>();
+					wordIDs.add(num);
 					tableSynsets.put(currentToken, wordIDs);
 				}				
 				
