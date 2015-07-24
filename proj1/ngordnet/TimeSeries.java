@@ -2,7 +2,7 @@ package ngordnet;
 import java.util.Collection;
 import java.util.TreeMap;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.LinkedList;
 
 public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
 
@@ -12,7 +12,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
 
 	public Collection<Number> years() {
 		Set<Integer> setOfKeys = keySet();
-		Collection<Number> collectionOfKeys = new TreeSet<Number>();
+		Collection<Number> collectionOfKeys = new LinkedList<Number>();
 		for (Integer num : setOfKeys) {
 			collectionOfKeys.add(num);
 		}
@@ -21,7 +21,7 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
 
 	public Collection<Number> data() {
 		Set<Integer> setOfKeys = keySet();
-		Collection<Number> collectionOfData = new TreeSet<Number>();
+		Collection<Number> collectionOfData = new LinkedList<Number>();
 		for (Integer num : setOfKeys) {
 			collectionOfData.add(get(num));
 		}
@@ -59,7 +59,11 @@ public class TimeSeries<T extends Number> extends TreeMap<Integer, T> {
 	public TimeSeries<Double> dividedBy(TimeSeries x) {
 		TimeSeries<Double> newSeries = new TimeSeries<Double>();
 		Set<Integer> setOfKeys = keySet();
+		Set<Integer> setOfKeysX = x.keySet();
 		for (Integer num : setOfKeys) {
+			if (!setOfKeysX.contains(num)) {
+				continue;
+			}
 			Double dVal = new Double(get(num).doubleValue() / x.get(num).doubleValue());
 			newSeries.put(num, dVal);
 		}

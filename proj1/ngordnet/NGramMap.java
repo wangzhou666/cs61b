@@ -2,6 +2,7 @@ package ngordnet;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Set;
 import edu.princeton.cs.introcs.In;
 
 public class NGramMap {
@@ -87,5 +88,51 @@ public class NGramMap {
 		return summedWordHistory.dividedBy(mapYearToTotalCount);
 	}
 
+	public TimeSeries<Integer> countHistory(String word, int yearStart, int yearEnd) {
+		TimeSeries<Integer> totalHistory = countHistory(word);
+		Set<Integer> years = totalHistory.keySet();
+		TimeSeries<Integer> periodHistory = new TimeSeries<Integer>();
+		for (Integer year : years) {
+			if (year >= yearStart & year <= yearEnd) {
+				periodHistory.put(year, totalHistory.get(year));
+			}
+		}
+		return periodHistory;
+	}
 
+	public TimeSeries<Double> weightHistory(String word, int yearStart, int yearEnd) {
+		TimeSeries<Double> totalWeightHistory = weightHistory(word);
+		Set<Integer> years = totalWeightHistory.keySet();
+		TimeSeries<Double> periodWeightHistory = new TimeSeries<Double>();
+		for (Integer year : years) {
+			if (year >= yearStart & year <= yearEnd) {
+				periodWeightHistory.put(year, totalWeightHistory.get(year));
+			}
+		}
+		return periodWeightHistory;
+	}
+
+	public TimeSeries<Double> summedWeightHistory(ArrayList<String> words, int yearStart, int yearEnd) {
+		TimeSeries<Double> totalSummedWeightHistory = summedWeightHistory(words);
+		Set<Integer> years = totalSummedWeightHistory.keySet();
+		TimeSeries<Double> periodSummedWeightHistory = new TimeSeries<Double>();
+		for (Integer year : years) {
+			if (year >= yearStart & year <= yearEnd) {
+				periodSummedWeightHistory.put(year, totalSummedWeightHistory.get(year));
+			}
+		}
+		return periodSummedWeightHistory;
+	}
+
+	public TimeSeries processedHistory(int yearStart, int yearEnd, YearlyRecordProcessor yrp) {
+		TimeSeries periodProcessedHistory = new TimeSeries();
+		Set<Integer> years = mapYearToWordAndCount.keySet();
+		for (Integer year : years) {
+			if (year >= yearStart & year <= yearEnd) {
+				double averageLength = yrp.process(mapYearToWordAndCount.get(year));
+				periodProcessedHistory.put(year, averageLength);
+			}
+		}
+		return periodProcessedHistory;
+	}
 }
